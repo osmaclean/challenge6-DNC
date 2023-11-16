@@ -28,8 +28,93 @@ router.post('/create', (req, res) => {
 })
 
 
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource 2365465465');
+router.get('/', (req, res) => {
+  try {
+    const db = req.dbConnection;
+    const sql = "SELECT * FROM clients"
+
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error(`Error in consulting database: ${err}`);
+        return res.status(500).json({ error: `Internal error in server` })
+      } else {
+        res.json({ data: results });
+        db.release();
+      }
+    })
+
+  } catch (error) {
+    console.error(`Error in consulting database: ${error}`)
+    res.status(500).json({ error: `Error in consulting database` })
+  }
 });
+
+router.get('/:id', (req, res) => {
+  try {
+    const db = req.dbConnection;
+    const id = req.params.id;
+    const sql = "SELECT * FROM clients WHERE id = ?"
+
+    db.query(sql, [id], (err, results) => {
+      if (err) {
+        console.error(`Error in consulting database: ${err}`);
+        return res.status(500).json({ error: `Internal error in server` })
+      } else {
+        res.json({ data: results });
+        db.release();
+      }
+    })
+
+  } catch (error) {
+    console.error(`Error in consulting database: ${error}`)
+    res.status(500).json({ error: `Error in consulting database` })
+  }
+});
+
+router.put('/:id', (req, res) => {
+  try {
+    const db = req.dbConnection;
+    const id = req.params.id;
+    const updatedInfo = req.body;
+    const sql = "UPDATE clients SET ? WHERE id = ?"
+    const values = [updatedInfo, id]
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error(`Error when editing customer in database: ${err}`);
+        return res.status(500).json({ error: `Internal error in server` })
+      } else {
+        res.json({ data: updatedInfo, results });
+        db.release();
+      }
+    });
+
+  } catch (error) {
+    console.error(`Error in consulting database: ${error}`)
+    res.status(500).json({ error: `Error in consulting database` })
+  }
+});
+
+router.delete('/:id', (req, res) => {
+  try {
+    const db = req.dbConnection;
+    const id = req.params.id
+    const sql = "DELETE FROM clients WHERE id = ?"
+
+    db.query(sql, [id], (err, results) => {
+      if (err) {
+        console.error(`Error when deleting customer in database: ${err}`);
+        return res.status(500).json({ error: `Internal error in server` })
+      } else {
+        res.json({ data: 'User deleted successfully', results });
+        db.release();
+      }
+    })
+
+  } catch (error) {
+    console.error(`Error in consulting database: ${error}`)
+    res.status(500).json({ error: `Error in consulting database` })
+  }
+})
 
 module.exports = router;
