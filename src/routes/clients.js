@@ -18,7 +18,7 @@ router.post('/create', (req, res) => {
         return res.status(500).json({ error: err });
       }
 
-      res.status(201).json({ client_id: results.insertId });
+      res.status(201).json({ status: 'Created', message: "Customer record created successfully", client_id: results.insertId });
       db.release()
     })
   } catch (error) {
@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
         console.error(`Error in consulting database: ${err}`);
         return res.status(500).json({ error: `Internal error in server` })
       } else {
-        res.json({ data: results });
+        res.status(200).json({ status: 'Ok', message: "Search completed successfully", data: results });
         db.release();
       }
     })
@@ -60,7 +60,7 @@ router.get('/:id', (req, res) => {
         console.error(`Error in consulting database: ${err}`);
         return res.status(500).json({ error: `Internal error in server` })
       } else {
-        res.json({ data: results });
+        res.res.status(200).json({ status: 'Ok', message: "Search completed successfully", data: results });
         db.release();
       }
     })
@@ -84,7 +84,7 @@ router.put('/:id', (req, res) => {
         console.error(`Error when editing customer in database: ${err}`);
         return res.status(500).json({ error: `Internal error in server` })
       } else {
-        res.json({ data: updatedInfo, results });
+        res.status(200).json({ status: 'Ok', message: "Update done successfully", data: updatedInfo, results });
         db.release();
       }
     });
@@ -106,7 +106,7 @@ router.delete('/:id', (req, res) => {
         console.error(`Error when deleting customer in database: ${err}`);
         return res.status(500).json({ error: `Internal error in server` })
       } else {
-        res.json({ data: 'User deleted successfully', results });
+        res.status(200).json({ status: 'Ok', message: 'User deleted successfully', data: results });
         db.release();
       }
     })
