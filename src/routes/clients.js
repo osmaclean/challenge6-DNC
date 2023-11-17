@@ -16,10 +16,10 @@ router.post('/create', (req, res) => {
       if (err) {
         console.error(`Error creating customer in database: ${err}`);
         return res.status(500).json({ error: err });
+      } else {
+        res.status(201).json({ status: 'Created', message: "Customer record created successfully", client_id: results.insertId });
+        db.release()
       }
-
-      res.status(201).json({ status: 'Created', message: "Customer record created successfully", client_id: results.insertId });
-      db.release()
     })
   } catch (error) {
     console.error(`Error inserting data into the customers table: ${error}`)
