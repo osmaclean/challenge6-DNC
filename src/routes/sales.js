@@ -79,8 +79,8 @@ async function checkStock(products) {
   for (const product of products) {
     try {
       const response = await axios.get(`http://localhost:4000/stock/${product.product_id}`)
-      const result = response.data.result;
-      const quantity = result.quantity;
+      const result = response.data.data;
+      const quantity = result[0].quantity;
 
       if (product.quantity > quantity) {
         return false;
@@ -119,8 +119,8 @@ async function createdProductsSales(product, salesId, db) {
 
 async function updateStock(productId, quantity) {
   try {
-    const requestBody = { quantity };
-    const response = await axios.get(`http://localhost:4000/stock/update/${productId}`, requestBody)
+    const requestBody = { "quantity": quantity };
+    const response = await axios.put(`http://localhost:4000/stock/update/${productId}`, requestBody)
 
     if (response.status !== 200) throw new Error(`Error updating inventory for product ${productId}`)
     else console.log(`Successfully updated stock for product ${productId}`)
