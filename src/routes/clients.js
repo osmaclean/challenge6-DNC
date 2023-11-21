@@ -60,7 +60,7 @@ router.get('/:id', (req, res) => {
         console.error(`Error in consulting database: ${err}`);
         return res.status(500).json({ error: `Internal error in server` })
       } else {
-        res.res.status(200).json({ status: 'Ok', message: "Search completed successfully", data: results });
+        res.status(200).json({ status: 'Ok', message: "Search completed successfully", data: results });
         db.release();
       }
     })
