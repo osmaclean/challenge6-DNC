@@ -48,7 +48,7 @@ router.get('/:id', (req, res) => {
   }
 })
 
-router.post('/', async function (req, res) {
+router.post('/create', async function (req, res) {
   try {
     const db = req.dbConnection;
     const { products, client_id } = req.body;
